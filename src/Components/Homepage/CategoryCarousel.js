@@ -55,7 +55,7 @@ export default function CategoryCarousel() {
     return (
         <>
             <div className="page-head">
-                <h1>Choose from a wide variety of Cuisins</h1>
+                <h1>Choose from a wide variety of Cuisines</h1>
             </div>
             <Slider ref={sliderRef}{...settings}>
                 <div className="col">

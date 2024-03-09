@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './loginpage.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../Store/auth-slice';
 
 function CustomerRegistration() {
@@ -16,7 +16,8 @@ function CustomerRegistration() {
   const navigate = useNavigate();
   const location = useLocation();
   const [prevLocation, setPrevLocation] = useState(null);
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   // useEffect(()=>{
   //   if(location.state && location.state.from){
@@ -81,10 +82,10 @@ function CustomerRegistration() {
       // else{
       //   navigate('/');
       // }
-      if(location.state && location.state.from){
+      if (location.state && location.state.from) {
         navigate(location.state.from);
       }
-      else{
+      else {
         navigate('/');
       }
       // window.location.reload();
@@ -99,7 +100,9 @@ function CustomerRegistration() {
   };
 
   return (
-    <main>
+    <>
+    {!isLoggedIn?(
+      <main>
       <br /><br /><br /><br />
       <section className="user-container">
         <div className="grid-two--column">
@@ -177,6 +180,9 @@ function CustomerRegistration() {
         </div>
       </section>
     </main>
+    ):(null)}
+      
+    </>
   );
 }
 

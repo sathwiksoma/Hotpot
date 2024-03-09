@@ -71,7 +71,7 @@ export default function NavbarLogin() {
                                 <NavLink className="nav-link mx-lg-2" to='/about'>About</NavLink>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link mx-lg-2" tp='/contact'>Contact</NavLink>
+                                <NavLink className="nav-link mx-lg-2" to='/contact'>Contact</NavLink>
                             </li>
                         </ul>
                     </div>

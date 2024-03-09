@@ -21,6 +21,9 @@ import Confirmation from './Components/Confirmationpage/Confirmation';
 import AdminLogin from './Components/Loginpage/AdminLoginPage';
 import Admin from './Components/AdminPage/Admin';
 import Contact from './Components/Contactpage/Contact';
+import PrivateRoute from './Components/Privateroute/PrivateRoute';
+import PrivateRouteDeliveryPartner from './Components/Privateroute/PrivateRouteDeliveryPartner';
+import PrivateRouteRestaurant from './Components/Privateroute/PrivateRouteRestaurant';
 
 function App() {
   var [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -44,27 +47,34 @@ function App() {
         <Routes>
           <Route path='/' element={<HomePage />} />
           <Route path='/restaurants' element={<RestaurantPage />} />
-          {/* <Route path='/restaurants' element={<RestaurantPage />} /> */}
           <Route path='/about' element={<AboutPage />} />
           <Route path='/contact' element={<Contact />} />
-          <Route path='/carts'>
-            <Route path=':userId' element={<Cartitems />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/carts'>
+              <Route path=':userId' element={<Cartitems />} />
+            </Route>
           </Route>
-          {/* <Route path={'/carts/:userId'} element={<Cartitems />} /> */}
           <Route path='/customer-login' element={<CustomerRegistration />} />
           <Route path='/menus'>
             <Route path=':restaurantId' element={<MenuPage />} />
           </Route>
-          <Route path='/customer-profile'>
-            <Route path=':customerId' element={<CustomerProfile />} />
+          <Route element={<PrivateRoute />}>
+            <Route path='/customer-profile'>
+              <Route path=':customerId' element={<CustomerProfile />} />
+            </Route>
           </Route>
-          {/* <Route path='/customer-login' element={<Login />} /> */}
           <Route path='/restaurant-login' element={<Registration />} />
-          <Route path='/restaurant-profile' element={<OwnerProfile />} />
+          <Route element={<PrivateRouteRestaurant />}>
+            <Route path='/restaurant-profile' element={<OwnerProfile />} />
+          </Route>
           <Route path='/delivery-partner-login' element={<DeliveryPartnerLogin />} />
-          <Route path='/delivery-partner-profile' element={<PartnerProfile />} />
-          <Route path='/check-out-page' element={<Checkout />} />
-          <Route path='/order-confirmation' element={<Confirmation />} />
+          <Route element={<PrivateRouteDeliveryPartner />}>
+            <Route path='/delivery-partner-profile' element={<PartnerProfile />} />
+          </Route>
+          <Route element={<PrivateRoute />}>
+            <Route path='/check-out-page' element={<Checkout />} />
+            <Route path='/order-confirmation' element={<Confirmation />} />
+          </Route>
           <Route path='/admin-login' element={<AdminLogin />} />
           <Route path='/admin-profile' element={<Admin />} />
         </Routes>

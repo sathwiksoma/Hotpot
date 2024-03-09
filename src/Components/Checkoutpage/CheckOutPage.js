@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios";
 import './Checkout.css'; // Import your CSS file
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Checkout = () => {
     const [orderSummary, setOrderSummary] = useState([{
@@ -29,6 +30,7 @@ const Checkout = () => {
     const [error, setError] = useState(null);
     const customerId = sessionStorage.getItem('UserId');
     const customerToken = sessionStorage.getItem('Token');
+    const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
     const navigate = useNavigate();
 
     var requestOptions = {
@@ -106,7 +108,7 @@ const Checkout = () => {
                         // navigate(`/customer-profile/${customerId}`);
                         navigate('/order-confirmation');
                     })
-                    .catch(e=>console.log(e));
+                    .catch(e => console.log(e));
             }
         }
     };
@@ -138,46 +140,60 @@ const Checkout = () => {
         navigate(`/menus/${orderSummary[0].restaurantId}`);
     }
 
-    const toProfile=()=>{
+    const toProfile = () => {
         navigate(`/customer-profile/${customerId}`);
     }
 
     return (
-        <div className="checkout-container">
-            <br /><br /><br /><br /><br /><br /><br /><br /><br />
-            <div className="card card-1 order-summary">
-                <h2>Order Summary</h2>
-                <ul>
-                    {orderSummary.map(item => (
-                        <li key={item.cartId}>
-                            <p>Item: {item.menuTitle}</p>
-                            <p>Quantity: {item.quantity}</p>
-                            <p>Price: {item.price}</p>
-                        </li>
-                    ))}
-                </ul>
-                <p>Total: Rs.{totalAmount}</p>
-            </div>
-            <button className="add-more-item-btn" onClick={AddMoreItemsToCart}>Add More Item</button>
+        <>
+            {isLoggedIn ? (
+                <div className="checkout-container">
+                    <br /><br /><br /><br /><br /><br /><br /><br /><br />
+                    <div className="card card-1 order-summary">
+                        <h2>Order Summary</h2>
+                        <ul>
+                            {orderSummary.map(item => (
+                                <li key={item.cartId}>
+                                    <p>Item: {item.menuTitle}</p>
+                                    <p>Quantity: {item.quantity}</p>
+                                    <p>Price: {item.price}</p>
+                                </li>
+                            ))}
+                        </ul>
+                        <p>Total: Rs.{totalAmount}</p>
+                    </div>
+                    <button className="add-more-item-btn" onClick={AddMoreItemsToCart}>Add More Item</button>
 
 
-            {address && (
-                <div className="card card-1 address">
-                    <h2>Shipping Details</h2>
-                    <p>House Number: {address.houseNumber}</p>
-                    <p>Building Namer: {address.buildingName}</p>
-                    <p>Locality: {address.locality}</p>
-                    <p>City: {address.city.name}</p>
-                    <p>LandMark: {address.landMark}</p>
+                    {address && (
+                        <div className="card card-1 address">
+                            <h2>Shipping Details</h2>
+                            <p>House Number: {address.houseNumber}</p>
+                            <p>Building Namer: {address.buildingName}</p>
+                            <p>Locality: {address.locality}</p>
+                            <p>City: {address.city.name}</p>
+                            <p>LandMark: {address.landMark}</p>
 
 
-                    <button className="edit-button-address" onClick={toProfile}>Edit</button>
+                            <button className="edit-button-address" onClick={toProfile}>Edit</button>
 
-                </div>
-            )}
+                        </div>
+                    )}
+
+                    <div className='card card-1 payment-details'>
+                        <h2>Payment Detals</h2>
+                        <p>Card Number: </p>
+                        <input type='text' placeholder='0000 0000 0000 0000'></input>
+                        <br />
+                        <p>Expiry: (mm/yyyy)</p>
+                        <input type='text' placeholder='e.g. 04/24'></input>
+                        <br />
+                        <p>CVV: </p>
+                        <input type='password'></input>
+                    </div>
 
 
-            {/* {review && (
+                    {/* {review && (
         <div className="card card-1 review">
           <h2>Customer Review</h2>
           <p>Rating: {renderStarRating(review.rating)}</p>
@@ -187,10 +203,12 @@ const Checkout = () => {
       )} */}
 
 
-            <div className="place-order-btn">
-                <button onClick={handlePlaceOrder}>Place Order</button>
-            </div>
-        </div>
+                    <div className="place-order-btn">
+                        <button onClick={handlePlaceOrder}>Place Order</button>
+                    </div>
+                </div>
+            ) : null}
+        </>
     );
 };
 
