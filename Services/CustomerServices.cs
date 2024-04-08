@@ -155,79 +155,99 @@ namespace HotPotProject.Services
         {
             var carts = await _cartRepo.GetAsync();
             var cartItems = carts.Where(c => c.CustomerId == customerId).Where(c => c.Status == "added").ToList();
-            float totalAmount = 0;
-            foreach (var cart in cartItems)
+            // Check if cartItems is not empty
+            if (cartItems.Any())
             {
-                var menuItem = await _menuRepo.GetAsync(cart.MenuItemId);
-                totalAmount += menuItem.Price * cart.Quantity;
-            }
-            Order newOrder = new Order
-            {
-                OrderDate = DateTime.Now,
-                Amount = totalAmount,
-                Status = "created",
-                CustomerId = cartItems[0].CustomerId,
-                RestaurantId = cartItems[0].RestaurantId
-            };
-            var restaurant = await _restaurantRepo.GetAsync(cartItems[0].RestaurantId);
-            var deliveryPartners = await _deliveryPartnerRepo.GetAsync();
-            var deliveryPartnersFromCity = deliveryPartners.Where(d => d.CityId == restaurant.CityId).ToList();
-            Random random = new Random();
-            var deliveryPartner = deliveryPartnersFromCity[random.Next(deliveryPartnersFromCity.Count)];
-            var payment = await RecordPayment(newOrder);
-            if (payment.Status == "successful")
-            {
-                newOrder.Status = "placed";
-                newOrder.PartnerId = deliveryPartner.PartnerId;
-                newOrder = await _orderRepo.Add(newOrder);
-                List<MenuNameDTO> names = new List<MenuNameDTO>();
+                float totalAmount = 0;
                 foreach (var cart in cartItems)
                 {
                     var menuItem = await _menuRepo.GetAsync(cart.MenuItemId);
-                    OrderItem newOrderItem = new OrderItem
-                    {
-                        OrderId = newOrder.OrderId,
-                        MenuId = cart.MenuItemId,
-                        SubTotalPrice = menuItem.Price * cart.Quantity,
-                        Quantity = cart.Quantity
-                    };
-                    await _orderItemRepo.Add(newOrderItem);
-
-                    cart.Status = "purchased";
-                    await _cartRepo.Update(cart);
-
-                    MenuNameDTO menuNameDTO = new MenuNameDTO
-                    {
-                        ManuItemName = menuItem.Name,
-                        Quantity = cart.Quantity
-                    };
-                    names.Add(menuNameDTO);
+                    totalAmount += menuItem.Price * cart.Quantity;
                 }
-                payment.OrderId = newOrder.OrderId;
-                payment = await _paymentRepo.Update(payment);
-
-                OrderMenuDTO orderItems = new OrderMenuDTO
+                Order newOrder = new Order
                 {
-                    orderId = newOrder.OrderId,
-                    customerId = newOrder.CustomerId,
-                    restaurantId = newOrder.RestaurantId,
-                    menuName = names,
-                    Price = totalAmount,
-                    Status = newOrder.Status,
-                    partnerId = deliveryPartner.PartnerId,
-                    PartnerName = deliveryPartner.Name
+                    OrderDate = DateTime.Now,
+                    Amount = totalAmount,
+                    Status = "created",
+                    CustomerId = cartItems[0].CustomerId,
+                    RestaurantId = cartItems[0].RestaurantId
                 };
-                return orderItems;
+                var restaurant = await _restaurantRepo.GetAsync(cartItems[0].RestaurantId);
+                var deliveryPartners = await _deliveryPartnerRepo.GetAsync();
+                var deliveryPartnersFromCity = deliveryPartners.Where(d => d.CityId == restaurant.CityId).ToList();
+                Random random = new Random();
+                var deliveryPartner = deliveryPartnersFromCity[random.Next(deliveryPartnersFromCity.Count)];
+                var payment = await RecordPayment(newOrder);
+                if (payment.Status == "successful")
+                {
+                    newOrder.Status = "placed";
+                    newOrder.PartnerId = deliveryPartner.PartnerId;
+                    newOrder = await _orderRepo.Add(newOrder);
+                    List<MenuNameDTO> names = new List<MenuNameDTO>();
+                    foreach (var cart in cartItems)
+                    {
+                        var menuItem = await _menuRepo.GetAsync(cart.MenuItemId);
+                        OrderItem newOrderItem = new OrderItem
+                        {
+                            OrderId = newOrder.OrderId,
+                            MenuId = cart.MenuItemId,
+                            SubTotalPrice = menuItem.Price * cart.Quantity,
+                            Quantity = cart.Quantity
+                        };
+                        await _orderItemRepo.Add(newOrderItem);
+
+                        cart.Status = "purchased";
+                        await _cartRepo.Update(cart);
+
+                        MenuNameDTO menuNameDTO = new MenuNameDTO
+                        {
+                            ManuItemName = menuItem.Name,
+                            Quantity = cart.Quantity
+                        };
+                        names.Add(menuNameDTO);
+                    }
+                    payment.OrderId = newOrder.OrderId;
+                    payment = await _paymentRepo.Update(payment);
+
+                    OrderMenuDTO orderItems = new OrderMenuDTO
+                    {
+                        orderId = newOrder.OrderId,
+                        customerId = newOrder.CustomerId,
+                        restaurantId = newOrder.RestaurantId,
+                        menuName = names,
+                        Price = totalAmount,
+                        Status = newOrder.Status,
+                        partnerId = deliveryPartner.PartnerId,
+                        PartnerName = deliveryPartner.Name
+                    };
+
+                    return orderItems;
+
+                }
+                else
+                {
+                    throw new PaymentFailedException();
+                }
             }
-            throw new PaymentFailedException();
+            else
+            {
+                throw new PaymentFailedException();
+            }
         }
 
         [ExcludeFromCodeCoverage]
+        //The PlaceOrderForOne controller method in the controller layer invokes the PlaceOrderForOne method in the CustomerServices class,
+        //passing the cartItemId and paymentMode as parameters. This method handles placing an order for a single item in the cart.
         public async Task<OrderMenuDTO> PlaceOrderForOne(int cartItemId, string paymentMode)
         {
+            // Fetch cart item and corresponding menu item
             Cart cartItem = await _cartRepo.GetAsync(cartItemId);
             Menu menuItem = await _menuRepo.GetAsync(cartItem.MenuItemId);
+
+            // Calculate total amount for the order
             float amount = menuItem.Price * cartItem.Quantity;
+
+            // Create a new order object
             Order newOrder = new Order
             {
                 OrderDate = DateTime.Now,
@@ -235,24 +255,51 @@ namespace HotPotProject.Services
                 Status = "created",
                 CustomerId = cartItem.CustomerId,
                 RestaurantId = cartItem.RestaurantId,
+                PartnerId = 0 // Initialize to 0 initially
             };
-            OrderItem newOrderItem = new OrderItem
-            {
-                MenuId = menuItem.MenuId,
-                Quantity = cartItem.Quantity,
-                SubTotalPrice = amount
-            };
+
+            // Fetch restaurant details to get the city ID
+            Restaurant restaurant = await _restaurantRepo.GetAsync(cartItem.RestaurantId);
+            int restaurantCityId = restaurant.CityId;
+
+            // Fetch delivery partners from the same city
+            var deliveryPartners = await _deliveryPartnerRepo.GetAsync();
+            var deliveryPartnersFromCity = deliveryPartners.Where(d => d.CityId == restaurantCityId).ToList();
+
+            // Select a random delivery partner from the list
+            Random random = new Random();
+            var deliveryPartner = deliveryPartnersFromCity[random.Next(deliveryPartnersFromCity.Count)];
+
+            // Record payment
             var payment = await RecordPayment(newOrder);
+
+            // Check if payment was successful
             if (payment.Status == "successful")
             {
+                // Update order status to "placed" and add it to the database
                 newOrder.Status = "placed";
+                newOrder.PartnerId = deliveryPartner.PartnerId; // Assign partner ID
                 newOrder = await _orderRepo.Add(newOrder);
-                newOrderItem.OrderId = newOrder.OrderId;
+
+                // Create a new order item and add it to the database
+                OrderItem newOrderItem = new OrderItem
+                {
+                    OrderId = newOrder.OrderId,
+                    MenuId = menuItem.MenuId,
+                    Quantity = cartItem.Quantity,
+                    SubTotalPrice = amount
+                };
                 newOrderItem = await _orderItemRepo.Add(newOrderItem);
-                payment.OrderId = newOrderItem.OrderId;
+
+                // Update payment with order ID
+                payment.OrderId = newOrder.OrderId;
                 payment = await _paymentRepo.Update(payment);
+
+                // Update cart item status to "purchased"
                 cartItem.Status = "purchased";
                 cartItem = await _cartRepo.Update(cartItem);
+
+                // Create a list of menu names DTO
                 List<MenuNameDTO> names = new List<MenuNameDTO>();
                 MenuNameDTO menuNameDTO = new MenuNameDTO
                 {
@@ -260,6 +307,8 @@ namespace HotPotProject.Services
                     Quantity = cartItem.Quantity
                 };
                 names.Add(menuNameDTO);
+
+                // Create and return order DTO
                 OrderMenuDTO orderItems = new OrderMenuDTO
                 {
                     orderId = newOrder.OrderId,
@@ -267,11 +316,18 @@ namespace HotPotProject.Services
                     restaurantId = newOrder.RestaurantId,
                     menuName = names,
                     Price = amount,
+                    partnerId = deliveryPartner.PartnerId, // Assigning the partner ID
+                    PartnerName = deliveryPartner.Name
                 };
                 return orderItems;
             }
-            throw new PaymentFailedException();
+            else
+            {
+                // If payment was not successful, throw PaymentFailedException
+                throw new PaymentFailedException();
+            }
         }
+
 
         public async Task<Payment> RecordPayment(Order order)
         {

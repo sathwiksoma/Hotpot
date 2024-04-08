@@ -4,6 +4,10 @@
     {
         public RestaurantNotFoundException()
         {
+        }
+
+        public RestaurantNotFoundException(string v)
+        {
 
         }
 

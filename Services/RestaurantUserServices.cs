@@ -175,6 +175,21 @@ namespace HotPotProject.Services
             var specialities = await _specialityRepo.GetAsync();
             return specialities;
         }
+        public async Task<RestaurantSpeciality> AddRestaurantSpeciality(RestaurantSpeciality restaurantspeciality)
+        {
+            // Check if the restaurant exists
+            var restaurant = await _restaurantRepo.GetAsync(restaurantspeciality.RestaurantId);
+            if (restaurant == null)
+            {
+                throw new RestaurantNotFoundException("Restaurant not found.");
+            }
+
+            // Add the restaurant speciality
+            var addedSpeciality = await _specialityRepo.Add(restaurantspeciality);
+
+            // Return the added restaurant speciality
+            return addedSpeciality;
+        }
 
         public async Task<List<CustomerReview>> GetCustomerReviews()
         {

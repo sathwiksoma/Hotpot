@@ -4,6 +4,7 @@ using HotPotProject.Models.DTO;
 using HotPotProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -56,6 +57,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles ="DeliveryPartner,Admin")]
         [Route("GetDetails")]
         [HttpGet]
         public async Task<IActionResult> GetDetails(int partnerId)
@@ -72,6 +74,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "DeliveryPartner")]
         [Route("UpdateDetails")]
         [HttpPut]
         public async Task<IActionResult> UpdateDetails(DeliveryPartner deliveryPartner)
@@ -88,6 +91,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "DeliveryPartner,Admin")]
         [Route("ChangeOrderStatus")]
         [HttpPut]
         public async Task<IActionResult> ChangeOrderStatus(int orderId)
@@ -104,6 +108,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "DeliveryPartner,Admin")]
         [Route("GetAllOrders")]
         [HttpGet]
         public async Task<IActionResult> GetAllOrders(int partnerId)

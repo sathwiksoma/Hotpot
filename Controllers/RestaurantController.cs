@@ -4,6 +4,7 @@ using HotPotProject.Models.DTO;
 using HotPotProject.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -33,7 +34,7 @@ namespace HotPotProject.Controllers
         //        var newRestaurant=await _services.RegisterRestaurant
         //    }
         //}
-
+        [Authorize(Roles ="RestautrantOwner,Admin")]
         [Route("AddMenuItem")]
         [HttpPost]
         public async Task<ActionResult<Menu>> AddMenuItem(Menu newItem)
@@ -49,7 +50,7 @@ namespace HotPotProject.Controllers
                 return Unauthorized("Can't add the menu item");
             }
         }
-
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("ChangeOrderStatus")]
         [HttpPut]
         public async Task<ActionResult<Order>> ChangeOrderStatus(int orderId, string newStatus)
@@ -65,7 +66,7 @@ namespace HotPotProject.Controllers
                 return Unauthorized("Can't change the order status");
             }
         }
-
+        [Authorize(Roles = "Admin")]
         [Route("AddRestaurant")]
         [HttpPost]
         public async Task<Restaurant> AddRestaurant(Restaurant restaurant)
@@ -74,6 +75,7 @@ namespace HotPotProject.Controllers
             return restaurant;
         }
 
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("GetAllOrders")]
         [HttpGet]
         public async Task<ActionResult<List<Order>>> GetALlOrders()
@@ -90,6 +92,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("GetAllOrdersByRestaurant")]
         [HttpGet]
         public async Task<ActionResult<List<Order>>> GetALlOrders(int restaurantId)
@@ -106,6 +109,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("GetAllPayments")]
         [HttpGet]
         public async Task<ActionResult<List<Payment>>> GetPaymentsByRestaurants()
@@ -122,6 +126,8 @@ namespace HotPotProject.Controllers
             }
         }
 
+        
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("GetAllPaymentsByRestaurants")]
         [HttpGet]
         public async Task<ActionResult<List<Payment>>> GetPaymentsByRestaurants(int restaurantId)
@@ -137,6 +143,31 @@ namespace HotPotProject.Controllers
                 return NotFound("No payment data found");
             }
         }
+
+        [Authorize(Roles = "RestautrantOwner,Admin")]
+        [Route("AddRestaurantSpeciality")]
+        [HttpPost]
+        public async Task<ActionResult<RestaurantSpeciality>> AddRestaurantSpeciality(RestaurantSpeciality restaurantspeciality)
+        {
+            try
+            {
+                var addedSpeciality = await _services.AddRestaurantSpeciality(restaurantspeciality);
+                // Return 201 Created status along with the added restaurant speciality
+                return addedSpeciality;
+                
+            }
+            catch (RestaurantNotFoundException)
+            {
+                // Return 404 Not Found status if the restaurant is not found
+                return NotFound("Restaurant not found.");
+            }
+            catch (Exception)
+            {
+                // Return 500 Internal Server Error status for other exceptions
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
 
         [Route("GetSpecialities")]
         [HttpGet]
@@ -170,7 +201,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Route("Register")]
+        [Route("RegisterRestaurantOwner")]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterRestaurantDTO registerRestaurant)
         {
@@ -186,7 +217,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Route("GetAllReviews")]
+         [Route("GetAllReviews")]
         [HttpGet]
         public async Task<IActionResult> GetAllReviews()
         {
@@ -202,6 +233,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("DeleteMenuItem")]
         [HttpDelete]
         public async Task<IActionResult> DeleteMenuItem(int menuId)

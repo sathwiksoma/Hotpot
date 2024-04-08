@@ -8,6 +8,7 @@ namespace HotPotProject.Interfaces
         //public Task<List<Menu>> GetMenuByRestaurant(int RestaurantId);
         //public Task<Restaurant> GetRestaurantByName(string name);
         public Task<List<RestaurantSpeciality>> GetAllSpecialities();
+        Task<RestaurantSpeciality> AddRestaurantSpeciality(RestaurantSpeciality restaurantspeciality);
         public Task<List<CustomerReview>> GetCustomerReviews();
     }
 }

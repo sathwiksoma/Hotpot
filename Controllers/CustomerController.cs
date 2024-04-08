@@ -48,7 +48,7 @@ namespace HotPotProject.Controllers
             return result;
         }
 
-        //[Authorize(Roles ="Customer")]
+        [Authorize(Roles ="Customer")]
         //[Authorize]
         [Route("GetRestaurantsByCity")]
         [HttpGet]
@@ -70,7 +70,6 @@ namespace HotPotProject.Controllers
                 return NotFound(e.Message);
             }
         }
-
         [Route("GetRestaurantByName")]
         [HttpGet]
         public async Task<ActionResult<Restaurant>> GetRestaurantByName(string name)
@@ -103,7 +102,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("AddToCart")]
         [HttpPost]
         public async Task<CartMenuDTO> AddToCart(int userId, int menuItem)
@@ -112,7 +111,7 @@ namespace HotPotProject.Controllers
             return cart;
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("ViewCart")]
         [HttpGet]
         public async Task<ActionResult<List<CartMenuDTO>>> GetCarts(int userId)
@@ -129,7 +128,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("IncreaseCartItemQuantity")]
         [HttpPut]
         public async Task IncreaseCartItemQuantity(int cartId)
@@ -137,7 +136,7 @@ namespace HotPotProject.Controllers
             await _services.IncreaseCartItemQuantity(cartId);
         }
 
-        // [Authorize(Roles = "Customer")]
+         [Authorize(Roles = "Customer")]
         [Route("DecreaseCartItemQuantity")]
         [HttpPut]
         public async Task DecreaseCartItemQuantity(int cartId)
@@ -145,7 +144,7 @@ namespace HotPotProject.Controllers
             await _services.DecreaseCartItemQuantity(cartId);
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("DeleteCartItem")]
         [HttpPut]
         public async Task DeleteCartItem(int cartId)
@@ -153,7 +152,7 @@ namespace HotPotProject.Controllers
             await _services.DeleteCartItem(cartId);
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("EmptyCart")]
         [HttpPut]
         public async Task EmptyCart(int customerId)
@@ -163,6 +162,9 @@ namespace HotPotProject.Controllers
 
         [Route("PlaceOrderForOne")]
         [HttpPost]
+        //The PlaceOrderForOne controller method in the controller layer invokes the PlaceOrderForOne method in the CustomerServices class,
+        //passing the cartItemId and paymentMode as parameters.
+        //This method handles placing an order for a single item in the cart.
         public Task<OrderMenuDTO> PlaceOrderForOne(int cartId, string paymentMode)
         {
             var order = _services.PlaceOrderForOne(cartId, paymentMode);
@@ -177,7 +179,7 @@ namespace HotPotProject.Controllers
             return order;
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("ViewOrderStatus")]
         [HttpGet]
         public async Task<ActionResult<OrderMenuDTO>> ViewOrderStatus(int orderId)
@@ -194,7 +196,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [HttpGet("ViewOrderHistoryForCustomer")]
         public async Task<ActionResult> ViewOrderHistoryForCustomer(int customerId)
         {
@@ -210,7 +212,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("GetCustomerDetails")]
         [HttpGet]
         public async Task<IActionResult> GetCustomerDetails(int customerId)
@@ -227,7 +229,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [Route("UpdateCustomerDetails")]
         [HttpPut]
         public async Task<IActionResult> UpdateCustomerDetails(Customer customer)
@@ -277,7 +279,7 @@ namespace HotPotProject.Controllers
         }
 
         //Controllers set 2
-        // [Authorize(Roles = "Customer")]
+         [Authorize(Roles = "Customer")]
         [HttpPost("address")]
         public async Task<IActionResult> AddCustomerAddress(CustomerAddress customerAddress)
         {
@@ -293,7 +295,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        //[Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer")]
         [HttpPut("address/{addressId}")]
         public async Task<IActionResult> UpdateCustomerAddress(int addressId, CustomerAddressUpdateDTO addressUpdateDto)
         {
@@ -314,7 +316,7 @@ namespace HotPotProject.Controllers
         }
 
         //[Authorize(Roles = "RestaurantOwner")]
-        [Authorize]
+        // [Authorize]
         [HttpGet("address/{customerId}")]
         public async Task<IActionResult> ViewCustomerAddressByCustomerId(int customerId)
         {
@@ -334,7 +336,7 @@ namespace HotPotProject.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-
+        [Authorize(Roles = "Customer")]
         [HttpPost("review")]
         public async Task<IActionResult> AddCustomerReview(CustomerReview customerReview)
         {
@@ -349,7 +351,7 @@ namespace HotPotProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        [Authorize(Roles = "Customer,RestaurantOwner")]
         [HttpGet("review/{customerReviewId}")]
         public async Task<IActionResult> ViewCustomerReview(int customerReviewId)
         {
@@ -368,7 +370,7 @@ namespace HotPotProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        [Authorize(Roles = "Customer")]
         [HttpPut("review")]
         public async Task<IActionResult> UpdateCustomerReviewText(CustomerReviewUpdateDTO reviewUpdateDTO)
         {
@@ -387,7 +389,7 @@ namespace HotPotProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        [Authorize(Roles ="Customer")]
         [HttpDelete("review/{reviewId}")]
         public async Task<IActionResult> DeleteCustomerReview(int reviewId)
         {
