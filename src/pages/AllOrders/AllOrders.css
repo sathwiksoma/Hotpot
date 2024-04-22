@@ -1,0 +1,32 @@
+
+table {
+    width: 100%;
+    border-collapse: separate; /* Use 'separate' to control spacing */
+    border-spacing: 0px 10px; /* Controls the space between rows and columns */
+  }
+  
+  th, td {
+    padding: 12px 15px; /* Increased padding for better cell spacing */
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    min-width: 100px;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+    position: sticky; /* Makes headers sticky at top when scrolling */
+    top: 0;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Lighter shade for odd rows */
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #e7e7e7; /* Slightly darker shade for even rows */
+  }
+  
+  tr:hover {
+    background-color: #ececec; /* Hover effect for rows */
+  }
+  
