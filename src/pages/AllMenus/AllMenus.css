@@ -2,9 +2,10 @@ table {
     width: 100%;
     border-collapse: separate; /* Use 'separate' to control spacing */
     border-spacing: 0px 10px; /* Controls the space between rows and columns */
-    margin-left: 100%;
-    margin-top: 20%;
-  } 
+    margin-left: 140%;
+    margin-top: -120%;
+  }
+  
   th, td {
     padding: 12px 15px; /* Increased padding for better cell spacing */
     text-align: left;
@@ -29,18 +30,16 @@ table {
   tr:hover {
     background-color: #ececec; /* Hover effect for rows */
   }
-  /* Add this to your AllOrders.css file */
-.change-status {
-  background-color: green;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
+  /* Add styles for the delete button */
+.delete-button {
+  background-color: #ff4d4d; /* Red background color */
+  color: white; /* White text color */
+  border: none; /* Remove button border */
+  padding: 8px 12px; /* Adjust padding for button size */
+  cursor: pointer; /* Change cursor to pointer on hover */
+  border-radius: 4px; /* Add rounded corners */
 }
 
-.change-status:hover {
-  background-color: darkgreen;
+.delete-button:hover {
+  background-color: #e60000; /* Darker red on hover */
 }
-
-  

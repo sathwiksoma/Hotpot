@@ -9,22 +9,35 @@ import LoginPopup from './components/LoginPopup/LoginPopup'
 import AllOrders from './pages/AllOrders/AllOrders'
 import Admin from './pages/Admin/Admin'
 import Sidebar from './components/Sidebar/Sidebar'
+import AllRestaurants from './pages/AllRestaurants/AllRestaurants'
+import AllMenus from './pages/AllMenus/AllMenus'
 
 
 
 const App = () => {
-  const [showLogin,setShowLogin] = useState(false)
+  const [showLogin,setShowLogin] = useState(false);
+  const [filterRestaurant, setFilterRestaurant] = useState("");
+  const handleSearchByRestaurant = (e) => {
+    console.log(e.target.value);
+    setFilterRestaurant(e.target.value);
+  };
+
   return (
     <>
     {showLogin?<LoginPopup setShowLogin={setShowLogin}/>:<></>}
     <div className='app'>
-      <Navbar setShowLogin={setShowLogin}/>
+      <Navbar setShowLogin={setShowLogin}
+      restaurantFilter={filterRestaurant}
+      handleRestaurantSearch={handleSearchByRestaurant}/>
       <Routes>
-        <Route path='/' element={<Home/>} />
+        <Route path='/' element={<Home restaurant={filterRestaurant}/>} />
         <Route path='/cart' element={<Cart/>} />
         <Route path='/order' element={<PlaceOrder/>}/>
         <Route path='/AllOrders' element={<AllOrders/>}/>
         <Route path='/Admin' element={<Admin/>}/>
+        <Route path='/AllRestaurants' element={<AllRestaurants/>}/>
+        <Route path='/AllMenus' element={<AllMenus/>}/>
+        
       </Routes>
     </div>
    

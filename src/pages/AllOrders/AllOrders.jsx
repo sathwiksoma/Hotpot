@@ -17,10 +17,18 @@ export default function AllOrders() {
       console.error("Error while fetching orders", error);
     }
   };
-
+  const handleChangeOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await axios.put(`https://localhost:7157/api/Restaurant/ChangeOrderStatus?orderId=${orderId}&newStatus=${newStatus}`);
+      console.log("Order status changed:", response.data);
+      fetchAllOrders();
+    } catch (error) {
+      console.error("Error while changing order status:", error);
+    }
+  };
   return (
     <div className="orders-container">
-      <h1 className="all-orders-title">All Orders</h1>
+      
       <table>
         <thead>
           <tr>
@@ -31,6 +39,8 @@ export default function AllOrders() {
             <th>CustomerId</th>
             <th>RestaurantId</th>
             <th>PartnerId</th>
+            <th>change Order Status</th>
+
           </tr>
         </thead>
         <tbody>
@@ -43,6 +53,9 @@ export default function AllOrders() {
               <td>{order.customerId}</td>
               <td>{order.restaurantId}</td>
               <td>{order.partnerId}</td>
+              <td>
+                <button className="change-status" onClick={() => handleChangeOrderStatus(order.orderId, 'Delivered')}>Change Status</button>
+              </td>
             </tr>
           ))}
         </tbody>
