@@ -65,7 +65,7 @@ const Navbar = ({ setShowLogin, restaurantFilter, handleRestaurantSearch }) => {
           <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
         </div>
         <button onClick={() => setShowLogin(true)}>sign in</button>
-        <Link to="./Admin">Admin</Link>
+       
       </div>
     </div>
   );
