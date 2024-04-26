@@ -1,0 +1,146 @@
+table {
+    border-collapse: separate;
+    border-spacing: 0px 4px; 
+    width: 100%;
+  }
+  
+  .table-left-menu {
+    margin-left: 0;
+  }
+  
+  th, td {
+    padding: 10px 8px; 
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+    position: sticky; 
+    top: 0;
+    height: 80px;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; 
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #e7e7e7; 
+  }
+  
+  tr:hover {
+    background-color: #ececec; 
+  }
+  
+  .delete-button {
+    background-color: #ff4d4d; 
+    color: white; 
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer; 
+    border-radius: 4px; 
+  }
+  
+  .delete-button:hover {
+    background-color: #e60000; 
+  }
+  
+  .label-1 {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    min-width: 150px;
+  }
+  
+  .input-1 {
+    min-width: 200px;
+    margin-bottom: 4px;
+  }
+  
+  .header-all-menu {
+    margin-left: 0;
+  }
+  
+  .manage-menu {
+    margin-left: 0;
+  }
+  
+  .add-menu-btn {
+    margin-left: 0;
+  }
+  
+  .form {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menus-container {
+    max-width: 600px;
+    padding: 20px;
+  }
+  
+  .form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+  
+  .input-1[type="text"] {
+    width: 30%;
+    padding: 3px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; 
+  }
+  
+  button[type="submit"] {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #45a049;
+  }
+  
+  button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .table-left-menu {
+      margin-left: 0;
+    }
+  }
+  
+  @media screen and (max-width: 600px) {
+    .table-left-menu {
+      margin-left: 0;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    .table-left-menu {
+      margin-left: 0;
+    }
+  }
+  
