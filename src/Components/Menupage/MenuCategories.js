@@ -8,7 +8,7 @@ function MenuCategories() {
 
     useEffect(() => {
         // Fetch menu items from the backend API
-        axios.get('http://localhost:5249/api/Customer/GetMenuByRestaurant?restaurantId=1')
+        axios.get('https://localhost:7157/api/Customer/GetMenuByRestaurant?restaurantId=1')
             .then(response => {
                 setMenuItems(response.data);
             })

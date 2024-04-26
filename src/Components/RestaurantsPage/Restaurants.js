@@ -184,7 +184,7 @@ export default function Restaurants() {
                         {searchedRestaurants.map((restaurant) =>
                             <div className="col" key={restaurant.restaurantId}>
                                 <div className="card text-center h-100">
-                                    <img src={`${process.env.PUBLIC_URL}/${restaurant.restaurantImage}`} height="200px" className="card-img-top" alt="..." />
+                                    <img src={restaurant.restaurantImage} height="200px" className="card-img-top" alt="..." />
                                     <div className="card-body">
                                         <h5 className="card-title">{restaurant.restaurantName}</h5>
                                         <p className="card-text"><h6>Categories:</h6>

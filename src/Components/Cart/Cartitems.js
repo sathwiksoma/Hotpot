@@ -23,7 +23,7 @@ export default function Cartitems() {
     var requestOptions = {
         headers: { 'Authorization': 'Bearer ' + customerToken }
     };
-    const url = `http://localhost:5249/api/Customer/ViewCart?userId=${userId}`;
+    const url = `https://localhost:7157/api/Customer/ViewCart?userId=${userId}`;
 
     useEffect(() => {
         var data = axios.get(url, requestOptions)
@@ -44,7 +44,7 @@ export default function Cartitems() {
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
 
-        const increaseCart = `http://localhost:5249/api/Customer/IncreaseCartItemQuantity?cartId=${cartID}`;
+        const increaseCart = `https://localhost:7157/api/Customer/IncreaseCartItemQuantity?cartId=${cartID}`;
         fetch(increaseCart, requestOptions)
             .then(r => r.json())
             .then(r => console.log(r))
@@ -58,7 +58,7 @@ export default function Cartitems() {
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
 
-        const decreaseCart = `http://localhost:5249/api/Customer/DecreaseCartItemQuantity?cartId=${cartID}`;
+        const decreaseCart = `https://localhost:7157/api/Customer/DecreaseCartItemQuantity?cartId=${cartID}`;
         fetch(decreaseCart, requestOptions)
             .catch(e => console.log(e));
     };
@@ -69,7 +69,7 @@ export default function Cartitems() {
             headers: { 'Content-Type': 'application/json' },
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
-        const deleteCart = `http://localhost:5249/api/Customer/DeleteCartItem?cartId=${cartID}`;
+        const deleteCart = `https://localhost:7157/api/Customer/DeleteCartItem?cartId=${cartID}`;
         fetch(deleteCart, requestOptions)
             .catch(e => console.log(e));
     };
@@ -81,7 +81,7 @@ export default function Cartitems() {
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
 
-        const emptyCartUrl = `http://localhost:5249/api/Customer/EmptyCart?customerId=${customerID}`;
+        const emptyCartUrl = `https://localhost:7157/api/Customer/EmptyCart?customerId=${customerID}`;
         fetch(emptyCartUrl, requestOptions)
             .catch(e => console.log(e));
     };

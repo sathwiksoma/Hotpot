@@ -33,7 +33,7 @@ function DeliveryPartnerLogin() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/DeliveryPartner/Register', {
+      const response = await axios.post('https://localhost:7157/api/DeliveryPartner/Register', {
         name: name,
         email: email,
         phone: phone,
@@ -61,7 +61,7 @@ function DeliveryPartnerLogin() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/DeliveryPartner/Login', {
+      const response = await axios.post('https://localhost:7157/api/DeliveryPartner/Login', {
         userName: username,
         password: password,
         role: '',

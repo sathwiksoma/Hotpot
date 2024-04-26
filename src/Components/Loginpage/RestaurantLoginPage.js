@@ -21,7 +21,7 @@ function Registration() {
   useEffect(() => {
     const fetchRestaurants = async () => {
       try {
-        const response = await axios.get('http://localhost:5272/api/Customer/restaurants');
+        const response = await axios.get('https://localhost:5272/api/Customer/restaurants');
         setRestaurantList(response.data);
       } catch (error) {
         // setError('Error fetching restaurants');
@@ -35,7 +35,7 @@ function Registration() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5272/api/RestaurantOwner', {
+      const response = await axios.post('https://localhost:5272/api/RestaurantOwner', {
         Name: name,
         UserName: username,
         Password: password,
@@ -57,7 +57,7 @@ function Registration() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/Restaurant/Login', {
+      const response = await axios.post('https://localhost:7157/api/Restaurant/Login', {
         userName: username,
         password: password,
         role: '',

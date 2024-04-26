@@ -28,7 +28,7 @@ export default function NavbarLogin() {
 
     //fetching city names
     useEffect(() => {
-        axios.get('http://localhost:5249/api/Customer/GetAllCities')
+        axios.get('https://localhost:7157/api/Customer/GetAllCities')
             .then(function (response) {
                 setCities(response.data);
             })

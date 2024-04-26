@@ -17,7 +17,7 @@ function Cart(props) {
     //var [isLoading, setIsLoading]=useState(true);
     //const axios = require('axios');
     const userId = props.userid;
-    const url = `http://localhost:5249/api/Customer/ViewCart?userId=${userId}`;
+    const url = `https://localhost:7157/api/Customer/ViewCart?userId=${userId}`;
 
     useEffect(() => {
         var data = axios.get(url)
@@ -32,7 +32,7 @@ function Cart(props) {
     },[carts]);
 
     // const userId = 1;
-    // const url = `http://localhost:5249/api/Customer/ViewCart?userId=${userId}`;
+    // const url = `https://localhost:7157/api/Customer/ViewCart?userId=${userId}`;
     // var data = axios.get(url)
     //     .then(function (response) {
     //         setCarts(response.data);
@@ -78,7 +78,7 @@ function Cart(props) {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const increaseCart = `http://localhost:5249/api/Customer/IncreaseCartItemQuantity?cartId=${cartID}`;
+        const increaseCart = `https://localhost:7157/api/Customer/IncreaseCartItemQuantity?cartId=${cartID}`;
         fetch(increaseCart, requestOptions)
             .then(r => r.json())
             .then(r => console.log(r))
@@ -91,7 +91,7 @@ function Cart(props) {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const decreaseCart = `http://localhost:5249/api/Customer/DecreaseCartItemQuantity?cartId=${cartID}`;
+        const decreaseCart = `https://localhost:7157/api/Customer/DecreaseCartItemQuantity?cartId=${cartID}`;
         fetch(decreaseCart, requestOptions)
             .catch(e => console.log(e));
     };
@@ -101,7 +101,7 @@ function Cart(props) {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' }
         };
-        const deleteCart = `http://localhost:5249/api/Customer/DeleteCartItem?cartId=${cartID}`;
+        const deleteCart = `https://localhost:7157/api/Customer/DeleteCartItem?cartId=${cartID}`;
         fetch(deleteCart, requestOptions)
             .catch(e => console.log(e));
     };
@@ -112,7 +112,7 @@ function Cart(props) {
             headers: { 'Content-Type': 'application/json' }
         };
 
-        const emptyCartUrl = `http://localhost:5249/api/Customer/EmptyCart?customerId=${customerID}`;
+        const emptyCartUrl = `https://localhost:7157/api/Customer/EmptyCart?customerId=${customerID}`;
         fetch(emptyCartUrl, requestOptions)
             .catch(e => console.log(e));
     };

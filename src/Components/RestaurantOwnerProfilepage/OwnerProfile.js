@@ -4,6 +4,7 @@ import './OwnerProfile.css'; // Importing the CSS file
 import { useSelector } from 'react-redux';
 
 const OwnerProfile = () => {
+    console.log("INSIDE OWNER PROFILE")
     const [activeTab, setActiveTab] = useState('orders');
     const [orders, setOrders] = useState([]);
     const [payments, setPaymnets] = useState([]);
@@ -23,28 +24,41 @@ const OwnerProfile = () => {
     const [selectedMenuId, setSelectedMenuId] = useState();
     const [error, setError] = useState(null);
 
-    const restaurantOwnerId = sessionStorage.getItem('RestaurantOwnerId');
-    const restaurantToken = sessionStorage.getItem('RestaurantOwnerToken');
-    const authLoggedIn = useSelector((state) => state.siteauth.authLoggedIn);
-
+    // const restaurantOwnerId = sessionStorage.getItem('RestaurantOwnerId');
+    const restaurantToken = sessionStorage.getItem('Token');
+    const authLoggedIn = sessionStorage.getItem('role');
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
+        console.log("TAB=======> "+tab);
     };
 
     var requestOptions = {
         headers: { 'Authorization': 'Bearer ' + restaurantToken }
     };
-    useEffect(() => {
+    useEffect(() => {            
+    let restaurantId ;
+     const fetchRestaurantOwner = async() =>{
+            const userName = sessionStorage.getItem('UserName');
+            const ownerResponse = await axios.get(
+                `https://localhost:7157/api/Restaurant/GetRestaurantOwnerByUsername?username=${userName}`
+            );
+            restaurantId = ownerResponse.data.restaurantId;
+            sessionStorage.setItem("restaurantId", restaurantId);
+            console.log(restaurantId);
+        }
+          
         const fetchMenus = async () => {
+            const resId = sessionStorage.getItem('restaurantId');
             try {
-                const response = await axios.get(`http://localhost:5249/api/Customer/GetMenuByRestaurant?restaurantId=1`, requestOptions);
+                const response = await axios.get(`https://localhost:7157/api/Customer/GetMenuByRestaurant?restaurantId=${resId}`, requestOptions);
                 setMenus(response.data);
             } catch (error) {
                 console.error('Error fetching menus:', error);
                 setError('Error fetching menus. Please try again.');
             }
         };
+        fetchRestaurantOwner();
         fetchMenus();
     }, []);
 
@@ -58,8 +72,8 @@ const OwnerProfile = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(newMenu)
             };
-            fetch('http://localhost:5249/api/Restaurant/AddMenuItem', requestOptions);
-            // const response = await axios.post('http://localhost:5249/api/Restaurant/AddMenuItem', newMenu);
+            fetch('https://localhost:7157/api/Restaurant/AddMenuItem', requestOptions);
+            // const response = await axios.post('https://localhost:7157/api/Restaurant/AddMenuItem', newMenu);
             // console.log('Menu added:', response.data);
             // Reset form fields
             setNewMenu({
@@ -83,7 +97,7 @@ const OwnerProfile = () => {
 
     const handleDeleteMenu = async () => {
         try {
-            await axios.delete(`http://localhost:5249/api/Restaurant/DeleteMenuItem?menuId=${selectedMenuId}`);
+            await axios.delete(`https://localhost:7157/api/Restaurant/DeleteMenuItem?menuId=${selectedMenuId}`);
             alert("Menu Item deleted successfully");
             // After successfully deleting the menu, remove it from the dropdown list
             setMenus(menus.filter(menu => menu.menuId !== selectedMenuId));
@@ -98,9 +112,10 @@ const OwnerProfile = () => {
 
     useEffect(() => {
         const fetchOrders = async () => {
+            const resId = sessionStorage.getItem('restaurantId');
             try {
-                const response = await axios.get(`http://localhost:5249/api/Restaurant/GetAllOrdersByRestaurant?restaurantId=${restaurantOwnerId}`);
-                setOrders(response.data);
+                const response = await axios.get(`https://localhost:7157/api/Restaurant/GetAllOrdersByRestaurant?restaurantId=${resId}`);
+                setOrders (response.data);
                 setOrderStatuses(response.data.map(order => ({ orderId: order.orderId, status: order.status })));
 
             } catch (error) {
@@ -109,12 +124,13 @@ const OwnerProfile = () => {
         };
 
         fetchOrders();
-    }, []);
+    }, [orders,activeTab]);
 
     useEffect(() => {
         const fetchPayments = async () => {
+            const resId = sessionStorage.getItem('restaurantId');
             try {
-                const response = await axios.get(`http://localhost:5249/api/Restaurant/GetAllPaymentsByRestaurants?restaurantId=${restaurantOwnerId}`);
+                const response = await axios.get(`https://localhost:7157/api/Restaurant/GetAllPaymentsByRestaurants?restaurantId=${resId}`);
                 setPaymnets(response.data);
             } catch (error) {
                 console.error('Error getting payments:', error);
@@ -122,12 +138,12 @@ const OwnerProfile = () => {
         };
 
         fetchPayments();
-    }, []);
+    }, [payments,activeTab]);
 
     const handleChangestatus = async (orderId, newStatus) => {
-        // http://localhost:5272/api/Customer/${orderId}/status/${newStatus}
+        // https://localhost:5272/api/Customer/${orderId}/status/${newStatus}
         try {
-            await axios.put(`http://localhost:5249/api/Restaurant/ChangeOrderStatus?orderId=${orderId}&newStatus=${newStatus}`);
+            await axios.put(`https://localhost:7157/api/Restaurant/ChangeOrderStatus?orderId=${orderId}&newStatus=${newStatus}`);
             const updatedOrders = orders.map(order => {
                 if (order.orderId === orderId) {
                     return { ...order, status: newStatus };
@@ -206,7 +222,7 @@ const OwnerProfile = () => {
                                                     <td>${order.amount.toFixed(2)}</td>
                                                     <td>{order.status}</td>
                                                     <td>{order.customer.name}</td>
-                                                    <td>{order.deliveryPartner.name}</td>
+                                                    <td>{order.deliveryPartner?.name}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

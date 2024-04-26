@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 
 const Admin = () => {
-    const authLoggedIn = useSelector((state) => state.siteauth.authLoggedIn);
+    const authLoggedIn = sessionStorage.getItem('role');
     const [activeTab, setActiveTab] = useState('addRestaurant');
     const [formData, setFormData] = useState({
         restaurantName: 'Example Restaurant',
@@ -70,7 +70,7 @@ const Admin = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/Restaurant/GetAllOrders`);
+                const response = await axios.get(`https://localhost:7157/api/Restaurant/GetAllOrders`);
                 setOrderHistory(response.data);
                 // setOrderStatuses(response.data.map(order => ({ orderId: order.orderId, status: order.status })));
 
@@ -85,7 +85,7 @@ const Admin = () => {
     useEffect(() => {
         const fetchPayments = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/Restaurant/GetAllPayments`);
+                const response = await axios.get(`https://localhost:7157/api/Restaurant/GetAllPayments`);
                 setPaymentHistory(response.data);
             } catch (error) {
                 console.error('Error getting payments:', error);
@@ -110,13 +110,13 @@ const Admin = () => {
         // console.log('Adding restaurant:', restaurantData);
         // console.log('Adding admin', restaurantAdminData);
         // API call to add restaurant will be added here
-        //http://localhost:5249/api/api/Restaurant/AddRestaurant
+        //https://localhost:7157/api/api/Restaurant/AddRestaurant
         var requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(restaurantData)
         };
-        fetch('http://localhost:5249/api/Restaurant/AddRestaurant', requestOptions)
+        fetch('https://localhost:7157/api/Restaurant/AddRestaurant', requestOptions)
             .then(r => r.json())
             .then(r => {
                 setRestaurantData(r);
@@ -126,7 +126,7 @@ const Admin = () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(restaurantAdminData)
                 };
-                fetch('http://localhost:5249/api/Restaurant/Register', requestOptions)
+                fetch('https://localhost:7157/api/Restaurant/Register', requestOptions)
                     .then(r => r.json)
                     .catch(r => console.log(e));
             })

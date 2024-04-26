@@ -1,21 +1,24 @@
 import { useState } from "react";
+import axios from 'axios';
 import { Navigate, useNavigate } from "react-router-dom";
 
 function Login(){
     var [username, setUsername]=useState("");
     var [password, setPassword]=useState("");
     var [loggedIn, setLoggedIn]=useState(false);
+    const [email, setEmail] = useState("");
 
     var user={};
     var navigate=useNavigate();
 
-    var Login=(e)=>{
+    var Login=async (e)=>{
         e.preventDefault();
-        user.userId=0;
-        user.userName=username;
-        user.password=password;
-        user.role="";
-        user.token="";
+        user.userId = 0;
+        user.userName = username;
+        user.password = password;
+        user.email = email;
+        user.role = "";
+        user.token = "";
 
         console.log(user);
 
@@ -24,20 +27,29 @@ function Login(){
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(user)
         };
+try{
+   const r = await axios.post("https://localhost:7157/api/Auth/login", user);
+   sessionStorage.setItem("Token", r.data.key);
+   sessionStorage.setItem("UserName", r.data.userName);
+   sessionStorage.setItem("UserId", r.data.userId);
+   sessionStorage.setItem("role",r.data.role)
+   setLoggedIn(true);
+   
+if (r.data.role === "Admin") {
+// navigate("/Admin");
+navigate(`/admin-profile`);
+// window.location.href = "http://localhost:3000/Admin";
+// setShowLogin(false);
+} else if (r.data.role === "RestaurantOwner") {
+navigate(`/restaurant-profile`);
+// setShowLogin(false);
+} else {
+window.location.href = "http://localhost:3000/";
+}
 
-        fetch("http://localhost:5249/api/Customer/LogIn", requestOptions)
-        .then(r=>r.json())
-        .then(r=>{
-            sessionStorage.setItem("Token", r.token);
-            sessionStorage.setItem("UserName", r.userName);
-            sessionStorage.setItem("UserId", r.userId);
-            setLoggedIn(true);
-            navigate('/');
-        })
-        .catch(e=>{
-            console.log(e);
-            setLoggedIn(false);
-        })
+}catch(e){
+    console.log(e)
+}
     }
     return(
         <div className="container">
@@ -53,6 +65,7 @@ function Login(){
             </form>
         </div>
     )
+
 }
 
 export default Login;

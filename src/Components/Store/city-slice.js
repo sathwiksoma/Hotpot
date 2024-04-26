@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const citySlice=createSlice({
     name: 'city',
-    initialState: {selectedCity: 'pune'},
+    initialState: {selectedCity: 'Hyderabad'},
     reducers:{
         changeCity(state, action){
             state.selectedCity=action.payload;

@@ -32,7 +32,7 @@ function CustomerRegistration() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/Customer/Register', {
+      const response = await axios.post('https://localhost:7157/api/Customer/Register', {
         name: name,
         email: email,
         phone: phone,
@@ -59,7 +59,7 @@ function CustomerRegistration() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/Customer/LogIn', {
+      const response = await axios.post('https://localhost:7157/api/Customer/LogIn', {
         userName: username,
         password: password,
         role: '',

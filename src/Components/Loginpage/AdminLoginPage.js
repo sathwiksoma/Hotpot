@@ -33,7 +33,7 @@ function AdminLogin() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/Customer/Register', {
+      const response = await axios.post('https://localhost:7157/api/Customer/Register', {
         name: name,
         email: email,
         phone: phone,
@@ -60,7 +60,7 @@ function AdminLogin() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5249/api/Admin/Login', {
+      const response = await axios.post('https://localhost:7157/api/Admin/Login', {
         userName: username,
         password: password,
         role: '',

@@ -64,7 +64,7 @@ function Carousel2() {
 
     //fetching categories
     useEffect(() => {
-        axios.get('http://localhost:5249/api/Restaurant/GetSpecialities')
+        axios.get('https://localhost:7157/api/Restaurant/GetSpecialities')
             .then(function (response) {
                 setCategories(response.data);
             })
@@ -98,7 +98,7 @@ function Carousel2() {
     // }, []);
 
     useEffect(() => {
-        const restoURL = `http://localhost:5249/api/Customer/GetRestaurantsByCity?city=${selectedCity}`;
+        const restoURL = `https://localhost:7157/api/Customer/GetRestaurantsByCity?city=${selectedCity}`;
         axios.get(restoURL)
             .then(function (response) {
                 setRestaurants(response.data);
@@ -136,7 +136,7 @@ function Carousel2() {
 
     // useEffect(() => {
     //     const fetchRestaurants = async () => {
-    //         const restoURL = `http://localhost:5249/api/Customer/GetRestaurantsByCity?city=${selectedCity}`;
+    //         const restoURL = `https://localhost:7157/api/Customer/GetRestaurantsByCity?city=${selectedCity}`;
     //         try {
     //             const response = await axios.get(restoURL);
     //             setRestaurants(response.data);
@@ -157,7 +157,7 @@ function Carousel2() {
 
     //fetching all the reviews
     useEffect(() => {
-        axios.get('http://localhost:5249/api/Restaurant/GetAllReviews')
+        axios.get('https://localhost:7157/api/Restaurant/GetAllReviews')
             .then(function (response) {
                 setAllReviews(response.data);
             })

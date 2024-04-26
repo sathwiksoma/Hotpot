@@ -21,7 +21,7 @@ export default function NavbarNormal() {
 
     //fetching city names
     useEffect(() => {
-        axios.get('http://localhost:5249/api/Customer/GetAllCities')
+        axios.get('https://localhost:7157/api/Customer/GetAllCities')
             .then(function (response) {
                 setCities(response.data);
             })
@@ -100,7 +100,7 @@ export default function NavbarNormal() {
                         </select>
                     </div>
                 </div>
-                <NavLink className="login-button" to='/customer-login'>LogIn</NavLink>
+                <NavLink className="login-button" to='/login'>LogIn</NavLink>
                 <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span className="navbar-toggler-icon"></span>
                 </button>

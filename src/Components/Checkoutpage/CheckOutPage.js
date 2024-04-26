@@ -40,7 +40,7 @@ const Checkout = () => {
         // Fetch order summary
         const fetchOrderSummary = async () => {
             try {
-                const orderSummaryResponse = await axios.get(`http://localhost:5249/api/Customer/ViewCart?userId=${customerId}`, requestOptions);
+                const orderSummaryResponse = await axios.get(`https://localhost:7157/api/Customer/ViewCart?userId=${customerId}`, requestOptions);
                 setOrderSummary(orderSummaryResponse.data);
             } catch (error) {
                 // setError(error.message);
@@ -51,7 +51,7 @@ const Checkout = () => {
         // Fetch customer address
         const fetchAddress = async () => {
             try {
-                const addressResponse = await axios.get(`http://localhost:5249/api/Customer/address/${customerId}`, requestOptions);
+                const addressResponse = await axios.get(`https://localhost:7157/api/Customer/address/${customerId}`, requestOptions);
                 setAddress(addressResponse.data);
             } catch (error) {
                 // setError(error.message);
@@ -61,7 +61,7 @@ const Checkout = () => {
 
         const fetchReview = async () => {
             try {
-                const reviewResponse = await axios.get('http://localhost:5249/api/Restaurant/GetAllReviews');
+                const reviewResponse = await axios.get('https://localhost:7157/api/Restaurant/GetAllReviews');
                 setReview(reviewResponse.data);
             } catch (error) {
                 // setError(error.message);
@@ -81,7 +81,7 @@ const Checkout = () => {
     const handlePlaceOrder = async () => {
         // try {
         //     // Make an HTTP POST request to trigger the controller
-        //     await axios.post('http://localhost:5272/api/Customer/create-orders/1');
+        //     await axios.post('https://localhost:5272/api/Customer/create-orders/1');
         //     // Optionally, you can add logic here to handle the response or perform any additional actions
         // } catch (error) {
         //     //   setError(error.message);
@@ -101,7 +101,7 @@ const Checkout = () => {
                     headers: { 'Content-Type': 'application/json' },
                     headers: { 'Authorization': 'Bearer ' + customerToken }
                 };
-                fetch(`http://localhost:5249/api/Customer/PlaceOrderForAll?customerId=${customerId}&paymentMode=online`, requestOptions)
+                fetch(`https://localhost:7157/api/Customer/PlaceOrderForAll?customerId=${customerId}&paymentMode=online`, requestOptions)
                     .then(r => r.json())
                     .then(r => {
                         alert("Order placed!");

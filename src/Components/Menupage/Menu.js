@@ -27,7 +27,7 @@ function Menu() {
     
 
     // var [isNotEmpty, setIsNotEmpty] = useState(false);
-    const url = `http://localhost:5249/api/Customer/ViewCart?userId=${userId}`;
+    const url = `https://localhost:7157/api/Customer/ViewCart?userId=${userId}`;
     var requestOptions = {
         headers: { 'Authorization': 'Bearer ' + customerToken }
     };
@@ -46,7 +46,7 @@ function Menu() {
 
     useEffect(() => {
         // Fetch menu items from the backend API
-        axios.get(`http://localhost:5249/api/Customer/GetMenuByRestaurant?restaurantId=${restaurantId}`)
+        axios.get(`https://localhost:7157/api/Customer/GetMenuByRestaurant?restaurantId=${restaurantId}`)
             .then(response => {
                 setMenuItems(response.data);
                 setFilteredMenuItems(response.data); // Initially set filtered items to all items
@@ -118,7 +118,7 @@ function Menu() {
 
     const handleSearch = async () => {
         try {
-            const response = await axios.get(`http://localhost:5249/api/Customer/menu/search?restaurantId=${restaurantId}&query=${searchQuery}`);
+            const response = await axios.get(`https://localhost:7157/api/Customer/menu/search?restaurantId=${restaurantId}&query=${searchQuery}`);
             setSearchedItems(response.data);
         } catch (error) {
             console.error('Error searching menu items:', error);
@@ -143,7 +143,7 @@ function Menu() {
                 headers: { 'Content-Type': 'application/json' },
                 headers: { 'Authorization': 'Bearer ' + customerToken }
             };
-            fetch(`http://localhost:5249/api/Customer/AddToCart?userId=${customerId}&menuItem=${menuItemId}`, requestOptions)
+            fetch(`https://localhost:7157/api/Customer/AddToCart?userId=${customerId}&menuItem=${menuItemId}`, requestOptions)
                 .then(r => r.json())
                 .then(r => {
                     console.log(r);
@@ -165,7 +165,7 @@ function Menu() {
             headers: { 'Content-Type': 'application/json' },
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
-        const deleteCart = `http://localhost:5249/api/Customer/DeleteCartItem?cartId=${CartId}`;
+        const deleteCart = `https://localhost:7157/api/Customer/DeleteCartItem?cartId=${CartId}`;
         fetch(deleteCart, requestOptions)
             .then(r => {
                 if (r.ok) {

@@ -74,7 +74,7 @@ const Profile = () => {
 
     //fetching city names
     useEffect(() => {
-        axios.get('http://localhost:5249/api/Customer/GetAllCities')
+        axios.get('https://localhost:7157/api/Customer/GetAllCities')
             .then(function (response) {
                 setCities(response.data);
             })
@@ -108,7 +108,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchCustomerDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/Customer/GetCustomerDetails?customerId=${customerId}`, requestOptions);
+                const response = await axios.get(`https://localhost:7157/api/Customer/GetCustomerDetails?customerId=${customerId}`, requestOptions);
                 setCustomerDetails(response.data);
             } catch (error) {
                 console.log(error);
@@ -126,7 +126,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchCustomerAddress = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/Customer/address/${customerId}`, requestOptions);
+                const response = await axios.get(`https://localhost:7157/api/Customer/address/${customerId}`, requestOptions);
                 setCustomerAddress(response.data);
             } catch (error) {
                 console.log(error);
@@ -146,7 +146,7 @@ const Profile = () => {
     }, [orderHistory]);
 
     const fetchOrderHistory = () => {
-        axios.get(`http://localhost:5249/api/Customer/ViewOrderHistoryForCustomer?customerId=${customerId}`, requestOptions)
+        axios.get(`https://localhost:7157/api/Customer/ViewOrderHistoryForCustomer?customerId=${customerId}`, requestOptions)
             .then(function (response) {
                 setOrderHistory(response.data);
             })
@@ -164,7 +164,7 @@ const Profile = () => {
             body: JSON.stringify(customerDetails)
         };
 
-        fetch("http://localhost:5249/api/Customer/UpdateCustomerDetails", requestOptions)
+        fetch("https://localhost:7157/api/Customer/UpdateCustomerDetails", requestOptions)
             .then(r => r.json())
             .then(alert("Profile details updated successfully"))
             .catch(e => console.log(e));
@@ -179,7 +179,7 @@ const Profile = () => {
             body: JSON.stringify(customerAddress)
         };
 
-        fetch(`http://localhost:5249/api/Customer/address/${addressId}`, requestOptions)
+        fetch(`https://localhost:7157/api/Customer/address/${addressId}`, requestOptions)
             .then(r => r.json())
             .then(alert("Address updated successfully"))
             .catch(e => console.log(e));
@@ -187,7 +187,7 @@ const Profile = () => {
 
     //method to cancel an order
     const cancelOrder = (orderId) => {
-        //http://localhost:5249/api/Customer/CancelOrderFromCustomer?orderId=5
+        //https://localhost:7157/api/Customer/CancelOrderFromCustomer?orderId=5
         // console.log("Order id: " + oId);
         // console.log(orderHistory);
         var requestOptions = {
@@ -196,14 +196,14 @@ const Profile = () => {
             headers: { 'Authorization': 'Bearer ' + customerToken }
         };
 
-        fetch(`http://localhost:5249/api/Customer/CancelOrderFromCustomer?orderId=${orderId}`, requestOptions)
+        fetch(`https://localhost:7157/api/Customer/CancelOrderFromCustomer?orderId=${orderId}`, requestOptions)
             .catch(e => console.log(e));
     };
 
     //fetching delivery partner details
     const fetchPartnerDetails = (partnerId) => {
         // console.log("Partner id: "+partnerId);
-        axios.get(`http://localhost:5249/api/DeliveryPartner/GetDetails?partnerId=${partnerId}`)
+        axios.get(`https://localhost:7157/api/DeliveryPartner/GetDetails?partnerId=${partnerId}`)
             .then(function (response) {
                 setDeliveryPartner(response.data);
             })
@@ -258,7 +258,7 @@ const Profile = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(customerReview)
         };
-        fetch('http://localhost:5249/api/Customer/review', requestOptions)
+        fetch('https://localhost:7157/api/Customer/review', requestOptions)
             .then(r => r.json)
             .catch(e => console.log(e));
     };

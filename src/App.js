@@ -16,6 +16,7 @@ import OwnerProfile from './Components/RestaurantOwnerProfilepage/OwnerProfile';
 import PartnerProfile from './Components/DeliveryPartnerProfilepage/PartnerProfile';
 import Registration from './Components/Loginpage/RestaurantLoginPage';
 import DeliveryPartnerLogin from './Components/Loginpage/DeliveryPartnerLoginPage';
+import Login from './Components/Loginpage/Login';
 import Checkout from './Components/Checkoutpage/CheckOutPage';
 import Confirmation from './Components/Confirmationpage/Confirmation';
 import AdminLogin from './Components/Loginpage/AdminLoginPage';
@@ -54,7 +55,7 @@ function App() {
               <Route path=':userId' element={<Cartitems />} />
             </Route>
           </Route>
-          <Route path='/customer-login' element={<CustomerRegistration />} />
+          {/* <Route path='/customer-login' element={<CustomerRegistration />} /> */}
           <Route path='/menus'>
             <Route path=':restaurantId' element={<MenuPage />} />
           </Route>
@@ -63,11 +64,11 @@ function App() {
               <Route path=':customerId' element={<CustomerProfile />} />
             </Route>
           </Route>
-          <Route path='/restaurant-login' element={<Registration />} />
-          <Route element={<PrivateRouteRestaurant />}>
+          {/* <Route path='/restaurant-login' element={<Registration />} /> */}
+          {/* <Route element={<PrivateRouteRestaurant />}> */}
             <Route path='/restaurant-profile' element={<OwnerProfile />} />
-          </Route>
-          <Route path='/delivery-partner-login' element={<DeliveryPartnerLogin />} />
+          {/* </Route> */}
+          {/* <Route path='/delivery-partner-login' element={<DeliveryPartnerLogin />} /> */}
           <Route element={<PrivateRouteDeliveryPartner />}>
             <Route path='/delivery-partner-profile' element={<PartnerProfile />} />
           </Route>
@@ -75,8 +76,9 @@ function App() {
             <Route path='/check-out-page' element={<Checkout />} />
             <Route path='/order-confirmation' element={<Confirmation />} />
           </Route>
-          <Route path='/admin-login' element={<AdminLogin />} />
-          <Route path='/admin-profile' element={<Admin />} />
+          {/* <Route path='/admin-login' element={<AdminLogin />} /> */}
+         <Route path='/admin-profile' element={<Admin />} /> 
+          <Route path='/login' element={<Login />}/>
         </Routes>
         <Footer />
       </AuthProvider>

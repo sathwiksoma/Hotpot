@@ -11,7 +11,7 @@ function RestaurantNav() {
         "phone": ""
     }]);
 
-    var data = axios.get("http://localhost:5249/api/Customer/GetRestaurantsByCity?city=pune")
+    var data = axios.get("https://localhost:7157/api/Customer/GetRestaurantsByCity?city=pune")
         .then(function (response) {
             setRestaurants(response.data);
         })
@@ -19,7 +19,7 @@ function RestaurantNav() {
             console.log(error);
         })
 
-    // var getData=()=>fetch("http://localhost:5249/api/Customer/GetRestaurantsByCity?city=pune")
+    // var getData=()=>fetch("https://localhost:7157/api/Customer/GetRestaurantsByCity?city=pune")
     // .then(r=>r.json())
     // .then(r=>{
     //     setRestaurants(r);

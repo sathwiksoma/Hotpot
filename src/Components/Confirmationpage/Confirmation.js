@@ -37,8 +37,8 @@ const Confirmation = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const ordersResponse = await axios.get(`http://localhost:5249/api/Customer/ViewOrderHistoryForCustomer?customerId=${customerId}`, requestOptions);
-                const addressResponse = await axios.get(`http://localhost:5249/api/Customer/address/${customerId}`, requestOptions);
+                const ordersResponse = await axios.get(`https://localhost:7157/api/Customer/ViewOrderHistoryForCustomer?customerId=${customerId}`, requestOptions);
+                const addressResponse = await axios.get(`https://localhost:7157/api/Customer/address/${customerId}`, requestOptions);
                 setOrders(ordersResponse.data);
                 setAddress(addressResponse.data);
                 setLoading(false);

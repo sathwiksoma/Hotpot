@@ -20,7 +20,7 @@ export default function PartnerProfile() {
     useEffect(() => {
         const fetchPartnerDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/DeliveryPartner/GetDetails?partnerId=${partnerId}`);
+                const response = await axios.get(`https://localhost:7157/api/DeliveryPartner/GetDetails?partnerId=${partnerId}`);
                 setProfile(response.data);
             } catch (error) {
                 console.log(error);
@@ -34,7 +34,7 @@ export default function PartnerProfile() {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await axios.get(`http://localhost:5249/api/DeliveryPartner/GetAllOrders?partnerId=${partnerId}`);
+                const response = await axios.get(`https://localhost:7157/api/DeliveryPartner/GetAllOrders?partnerId=${partnerId}`);
                 setOrders(response.data);
                 setOrderStatuses(response.data.map(order => ({ orderId: order.orderId, status: order.status })));
                 console.log(orders);
@@ -64,7 +64,7 @@ export default function PartnerProfile() {
             body: JSON.stringify(profile)
         };
 
-        fetch("http://localhost:5249/api/DeliveryPartner/UpdateDetails", requestOptions)
+        fetch("https://localhost:7157/api/DeliveryPartner/UpdateDetails", requestOptions)
             .then(r => r.json())
             .then(alert("Details updated successfully!"))
             .catch(e => console.log(e));
@@ -73,7 +73,7 @@ export default function PartnerProfile() {
     //change order status
     const handleChangestatus = (orderId) => {
         try {
-            axios.put(`http://localhost:5249/api/DeliveryPartner/ChangeOrderStatus?orderId=${orderId}`);
+            axios.put(`https://localhost:7157/api/DeliveryPartner/ChangeOrderStatus?orderId=${orderId}`);
             const updatedOrders = orders.map(order => {
                 if (order.orderId === orderId) {
                     return { ...order, status: 'delivered' };
