@@ -43,5 +43,34 @@ namespace HotPotProject.Services
 
             return token;
         }
+        public async Task<string> GenerateAllAuthorizationToken(LoginUserDTO loginUser)
+        {
+            string token = string.Empty;
+
+            var claims = new List<Claim>
+{
+    new Claim(JwtRegisteredClaimNames.NameId, loginUser.UserName),
+    new Claim(ClaimTypes.Role, "Admin"),
+    new Claim(ClaimTypes.Role, "Auth"),
+    new Claim(ClaimTypes.Role, "Customer"),
+    new Claim(ClaimTypes.Role, "DeliveryPartner"),
+    new Claim(ClaimTypes.Role, "RestautrantOwner")
+};
+
+            var cred = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+            var tokenDescription = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Today.AddDays(1),
+                SigningCredentials = cred
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var myToken = tokenHandler.CreateToken(tokenDescription);
+            token = tokenHandler.WriteToken(myToken);
+
+            return token;
+        }
     }
 }

@@ -12,8 +12,11 @@ namespace HotPotProject.Models
         public float Price { get; set; }
         public string? Description { get; set; } = string.Empty;
         public string? Cuisine { get; set; } = string.Empty;
+        public string? Category { get; set; } = string.Empty;
+
         public TimeSpan? CookingTime { get; set; }
         public string? TasteInfo { get; set; } = string.Empty;
+       
         public string? ItemImage { get; set; } = string.Empty;
         public int NutritionId { get; set; }
         [ForeignKey("NutritionId")]

@@ -57,7 +57,12 @@ namespace HotPotProject
             {
                 options.AddPolicy("ReactPolicy", opts =>
                 {
-                    opts.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+                    //opts.WithOrigins("https://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+                    //opts.WithOrigins("http://localhost:5173").AllowAnyMethod().AllowAnyHeader();
+                    //opts.WithOrigins("https://localhost:5174").AllowAnyMethod().AllowAnyHeader();
+                    //opts.WithOrigins("http://localhost:5174").AllowAnyMethod().AllowAnyHeader();
+                    opts.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+
                 });
             });
 
@@ -103,6 +108,7 @@ namespace HotPotProject
             builder.Services.AddScoped<ITokenServices, TokenServices>();
             builder.Services.AddScoped<IDeliveryPartnerServices, DeliveryPartnerServices>();
             builder.Services.AddScoped<IAdminServices, AdminServices>();
+            builder.Services.AddScoped<AuthServices>();
 
 
 

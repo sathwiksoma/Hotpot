@@ -1,18 +1,18 @@
 ﻿using HotPotProject.Exceptions;
 using HotPotProject.Interfaces;
-using HotPotProject.Models.DTO;
 using HotPotProject.Models;
+using HotPotProject.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace HotPotProject.Controllers
 {
+    [EnableCors("ReactPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("ReactPolicy")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerServices _services;
@@ -86,6 +86,7 @@ namespace HotPotProject.Controllers
             }
         }
 
+        [Authorize(Roles = "RestautrantOwner")]
         [Route("GetMenuByRestaurant")]
         [HttpGet]
         public async Task<ActionResult<List<Menu>>> GetMenuByRestaurant(int restaurantId)
@@ -102,16 +103,17 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+       //[Authorize(Roles = "Customer")]
         [Route("AddToCart")]
         [HttpPost]
-        public async Task<CartMenuDTO> AddToCart(int userId, int menuItem)
+        public async Task<int> AddToCart(int userId, int menuItemId)
         {
-            var cart = await _services.AddToCart(userId, menuItem);
-            return cart;
+            var cart = await _services.AddToCart(userId, menuItemId);
+            return cart; // Assuming CartMenuDTO has a property CartId
         }
 
-        [Authorize(Roles = "Customer")]
+
+      // [Authorize(Roles = "Customer")]
         [Route("ViewCart")]
         [HttpGet]
         public async Task<ActionResult<List<CartMenuDTO>>> GetCarts(int userId)
@@ -128,7 +130,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+      //  [Authorize(Roles = "Customer")]
         [Route("IncreaseCartItemQuantity")]
         [HttpPut]
         public async Task IncreaseCartItemQuantity(int cartId)
@@ -136,7 +138,7 @@ namespace HotPotProject.Controllers
             await _services.IncreaseCartItemQuantity(cartId);
         }
 
-         [Authorize(Roles = "Customer")]
+      //   [Authorize(Roles = "Customer")]
         [Route("DecreaseCartItemQuantity")]
         [HttpPut]
         public async Task DecreaseCartItemQuantity(int cartId)
@@ -144,12 +146,13 @@ namespace HotPotProject.Controllers
             await _services.DecreaseCartItemQuantity(cartId);
         }
 
-        [Authorize(Roles = "Customer")]
+       [Authorize(Roles = "Customer")]
         [Route("DeleteCartItem")]
-        [HttpPut]
-        public async Task DeleteCartItem(int cartId)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCartItem(int cartId)
         {
             await _services.DeleteCartItem(cartId);
+            return Ok("Item deleted successfully.");
         }
 
         [Authorize(Roles = "Customer")]
@@ -179,7 +182,7 @@ namespace HotPotProject.Controllers
             return order;
         }
 
-        [Authorize(Roles = "Customer")]
+       [Authorize(Roles = "Customer")]
         [Route("ViewOrderStatus")]
         [HttpGet]
         public async Task<ActionResult<OrderMenuDTO>> ViewOrderStatus(int orderId)
@@ -196,7 +199,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+       [Authorize(Roles = "Customer")]
         [HttpGet("ViewOrderHistoryForCustomer")]
         public async Task<ActionResult> ViewOrderHistoryForCustomer(int customerId)
         {
@@ -212,7 +215,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+       [Authorize(Roles = "Customer")]
         [Route("GetCustomerDetails")]
         [HttpGet]
         public async Task<IActionResult> GetCustomerDetails(int customerId)
@@ -229,7 +232,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+       [Authorize(Roles = "Customer")]
         [Route("UpdateCustomerDetails")]
         [HttpPut]
         public async Task<IActionResult> UpdateCustomerDetails(Customer customer)
@@ -469,5 +472,24 @@ namespace HotPotProject.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        [HttpGet("GetCustomerByUsername")]
+        public async Task<IActionResult> GetCustomerByUsername(string username)
+        {
+            try
+            {
+                var customer = await _services.GetCustomerByUsername(username);
+                if (customer == null)
+                {
+                    return NotFound("Customer not found");
+                }
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error retrieving customer by username: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
     }
 }

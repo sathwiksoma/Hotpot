@@ -6,6 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography;
 using System.Text;
 using HotPotProject.Mappers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotPotProject.Services
 {
@@ -342,13 +343,13 @@ namespace HotPotProject.Services
             return payment;
         }
 
-        public async Task<CartMenuDTO> AddToCart(int userId, int menuItemId)
+        public async Task<int> AddToCart(int userId, int menuItemId)
         {
             var menuItem = await _menuRepo.GetAsync(menuItemId);
             if (menuItem != null)
             {
                 var cartItems = await _cartRepo.GetAsync();
-                var customerCart = cartItems.Where(c => c.CustomerId == userId).Where(c => c.Status == "added").ToList();
+                var customerCart = cartItems.Where(c => c.CustomerId == userId && c.Status == "added").ToList();
                 var checkMenuInCart = customerCart.FirstOrDefault(c => c.MenuItemId == menuItemId);
                 if (checkMenuInCart == null)
                 {
@@ -361,21 +362,10 @@ namespace HotPotProject.Services
                         Status = "added"
                     };
                     cartItem = await _cartRepo.Add(cartItem);
-
-                    CartMenuDTO cartMenu = new CartMenuDTO
-                    {
-                        CartId = cartItem.Id,
-                        CustomerId = userId,
-                        RestaurantId = menuItem.RestaurantId,
-                        MenuItemId = menuItemId,
-                        MenuTitle = menuItem.Name,
-                        Quantity = cartItem.Quantity,
-                        Price = menuItem.Price * cartItem.Quantity
-                    };
-                    return cartMenu;
+                    return cartItem.Id; // Return just the CartId
                 }
                 await IncreaseCartItemQuantity(checkMenuInCart.Id);
-                return null;
+                return checkMenuInCart.Id; // Return the existing CartId
             }
             throw new NoMenuAvailableException();
         }
@@ -417,8 +407,7 @@ namespace HotPotProject.Services
         public async Task DeleteCartItem(int cartItemId)
         {
             var cartItem = await _cartRepo.GetAsync(cartItemId);
-            cartItem.Status = "deleted";
-            cartItem = await _cartRepo.Update(cartItem);
+            await _cartRepo.Delete(cartItem.Id);
         }
 
         public async Task EmptyCart(int customerId)
@@ -724,6 +713,27 @@ namespace HotPotProject.Services
             }
             var filteredMenuItems = allMenuItems.Where(m => string.Equals(m.Cuisine, cuisine, StringComparison.OrdinalIgnoreCase)).ToList();
             return filteredMenuItems;
+        }
+        public async Task<IActionResult> GetCustomerByUsername(string username)
+        {
+            try
+            {
+                var customers = await _custRepo.GetAsync();
+                var customer = customers.FirstOrDefault(c => c.UserName == username);
+                if (customer != null)
+                {
+                    return new OkObjectResult(customer);
+                }
+                else
+                {
+                    return new NotFoundResult();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"An error occurred while fetching customer by username: {ex.Message}");
+                return new StatusCodeResult(500);
+            }
         }
     }
 }

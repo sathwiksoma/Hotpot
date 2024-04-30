@@ -1,5 +1,6 @@
 ﻿using HotPotProject.Models.DTO;
 using HotPotProject.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotPotProject.Interfaces
 {

@@ -1,4 +1,5 @@
-﻿using HotPotProject.Models.DTO;
+﻿using HotPotProject.Models;
+using HotPotProject.Models.DTO;
 
 namespace HotPotProject.Interfaces
 {
@@ -6,5 +7,6 @@ namespace HotPotProject.Interfaces
     {
         public Task<LoginUserDTO> LoginAdmin(LoginUserDTO loginUser);
         public Task<LoginUserDTO> RegisterAdmin(LoginUserDTO registerUser);
+        
     }
 }

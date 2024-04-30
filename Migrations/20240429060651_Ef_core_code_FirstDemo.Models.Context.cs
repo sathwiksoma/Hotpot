@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HotPotProject.Migrations
 {
     /// <inheritdoc />
-    public partial class EF_HOTPOT_PROJECTAPPLICATIONTRACKERCONTEXT : Migration
+    public partial class Ef_core_code_FirstDemoModelsContext : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -202,6 +202,7 @@ namespace HotPotProject.Migrations
                     Price = table.Column<float>(type: "real", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Cuisine = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CookingTime = table.Column<TimeSpan>(type: "time", nullable: true),
                     TasteInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ItemImage = table.Column<string>(type: "nvarchar(max)", nullable: true),

@@ -1,4 +1,5 @@
 ﻿using HotPotProject.Context;
+using HotPotProject.Exceptions;
 using HotPotProject.Interfaces;
 using HotPotProject.Models;
 using Microsoft.EntityFrameworkCore;
@@ -90,5 +91,18 @@ namespace HotPotProject.Repositories
             var restaurant = restaurants.FirstOrDefault(r => r.RestaurantName.ToLower() == name.ToLower());
             return restaurant;
         }
+        public async Task<Restaurant> DeleteAsync(string name)
+        {
+            var restaurant = await GetAsync(name);
+            if (restaurant == null)
+            {
+                throw new RestaurantNotFoundException("Restaurant not found.");
+            }
+
+            _context.Restaurants.Remove(restaurant);
+            _context.SaveChanges();
+            return restaurant;
+        }
+
     }
 }

@@ -83,8 +83,8 @@ namespace HotPotProject.Repositories
         /// <param name="item"></param>
         /// <returns>An updated User object</returns>
         /// <exception cref="UserNotFoundException"></exception>
-        public async Task<Customer> Update(Customer item)
-        {
+      public async Task<Customer> Update(Customer item)
+          {
             var user = await GetAsync(item.Id);
             if (user != null)
             {

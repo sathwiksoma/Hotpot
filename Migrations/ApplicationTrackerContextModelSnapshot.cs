@@ -211,6 +211,9 @@ namespace HotPotProject.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuId"));
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<TimeSpan?>("CookingTime")
                         .HasColumnType("time");
 

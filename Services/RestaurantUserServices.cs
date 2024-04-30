@@ -207,5 +207,57 @@ namespace HotPotProject.Services
             menuItem = await _menuRepo.Delete(menuItemId);
             return menuItem;
         }
+        public async Task<Order> DeleteOrder(int orderId)
+        {
+            // Check if the order exists
+            var order = await _orderRepo.GetAsync(orderId);
+            if (order == null)
+            {
+                throw new OrdersNotFoundException("Order not found.");
+            }
+
+            // Delete the order
+            var deletedOrder = await _orderRepo.Delete(orderId);
+
+            // Return the deleted order
+            return deletedOrder;
+        }
+        public async Task<List<Restaurant>> GetAllRestaurants()
+        {
+            var restaurants = await _restaurantRepo.GetAsync();
+            return restaurants;
+        }
+        public async Task<List<Menu>> GetAllMenus()
+        {
+            var menus = await _menuRepo.GetAsync();
+            return menus;
+        }
+        public async Task<bool> DeleteRestaurant(int restaurantId)
+        {
+            // Check if the restaurant exists
+            var restaurant = await _restaurantRepo.GetAsync(restaurantId);
+            if (restaurant == null)
+            {
+                // Throw an exception if the restaurant is not found
+                throw new RestaurantNotFoundException("Restaurant not found.");
+            }
+
+            // Delete the restaurant
+            var deletedRestaurant = await _restaurantRepo.Delete(restaurantId);
+
+            // Return true to indicate successful deletion
+            return true;
+        }
+        public async Task<RestaurantOwner> GetRestaurantOwnerByUsername(string username)
+        {
+            // Fetch restaurant owner by username from the repository
+            var restaurantOwner = await _restOwnerRepo.GetAsync(username);
+            if (restaurantOwner == null)
+            {
+                // If not found, throw an exception
+                throw new RestaurantOwnerNotFoundException("Restaurant owner not found for the given username.");
+            }
+            return restaurantOwner;
+        }
     }
 }

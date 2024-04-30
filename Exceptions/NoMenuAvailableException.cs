@@ -6,6 +6,10 @@
         {
 
         }
+        public NoMenuAvailableException(string v)
+        {
+
+        }
 
         public override string Message => "No menu available at the moment to display";
     }

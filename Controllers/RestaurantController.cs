@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HotPotProject.Controllers
 {
+    [EnableCors("ReactPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("ReactPolicy")]
 
     public class RestaurantController : ControllerBase
     {
@@ -34,7 +34,7 @@ namespace HotPotProject.Controllers
         //        var newRestaurant=await _services.RegisterRestaurant
         //    }
         //}
-        [Authorize(Roles ="RestautrantOwner,Admin")]
+      //[Authorize(Roles ="RestautrantOwner,Admin")]
         [Route("AddMenuItem")]
         [HttpPost]
         public async Task<ActionResult<Menu>> AddMenuItem(Menu newItem)
@@ -50,7 +50,7 @@ namespace HotPotProject.Controllers
                 return Unauthorized("Can't add the menu item");
             }
         }
-        [Authorize(Roles = "RestautrantOwner,Admin")]
+       [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("ChangeOrderStatus")]
         [HttpPut]
         public async Task<ActionResult<Order>> ChangeOrderStatus(int orderId, string newStatus)
@@ -66,7 +66,7 @@ namespace HotPotProject.Controllers
                 return Unauthorized("Can't change the order status");
             }
         }
-        [Authorize(Roles = "Admin")]
+       [Authorize(Roles = "Admin")]
         [Route("AddRestaurant")]
         [HttpPost]
         public async Task<Restaurant> AddRestaurant(Restaurant restaurant)
@@ -92,7 +92,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "RestautrantOwner,Admin")]
+       [Authorize(Roles = "RestautrantOwner")]
         [Route("GetAllOrdersByRestaurant")]
         [HttpGet]
         public async Task<ActionResult<List<Order>>> GetALlOrders(int restaurantId)
@@ -127,7 +127,7 @@ namespace HotPotProject.Controllers
         }
 
         
-        [Authorize(Roles = "RestautrantOwner,Admin")]
+       [Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("GetAllPaymentsByRestaurants")]
         [HttpGet]
         public async Task<ActionResult<List<Payment>>> GetPaymentsByRestaurants(int restaurantId)
@@ -144,7 +144,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "RestautrantOwner,Admin")]
+       //[Authorize(Roles = "RestautrantOwner,Admin")]
         [Route("AddRestaurantSpeciality")]
         [HttpPost]
         public async Task<ActionResult<RestaurantSpeciality>> AddRestaurantSpeciality(RestaurantSpeciality restaurantspeciality)
@@ -249,5 +249,79 @@ namespace HotPotProject.Controllers
                 return BadRequest(e.Message);
             }
         }
+       
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        [Route("GetAllRestaurants")]
+        public async Task<ActionResult<List<Restaurant>>> GetAllRestaurants()
+        {
+            try
+            {
+                var restaurants = await _services.GetAllRestaurants();
+                return Ok(restaurants);
+            }
+            catch (Exception e)
+            {
+                _logger.LogCritical(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+       
+        //[Authorize(Roles = "Admin")]
+        [Route("GetAllMenus")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllMenus()
+        {
+            try
+            {
+                var menus = await _services.GetAllMenus();
+                return Ok(menus);
+            }
+            catch (Exception e)
+            {
+                _logger.LogCritical(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+       
+        [Authorize(Roles = "Admin")]
+        [Route("DeleteRestaurant")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteRestaurant(int restaurantId)
+        {
+            try
+            {
+                var deletedRestaurant = await _services.DeleteRestaurant(restaurantId);
+                return Ok(deletedRestaurant);
+            }
+            catch (RestaurantNotFoundException e)
+            {
+                _logger.LogCritical(e.Message);
+                return NotFound(e.Message);
+            }
+        }
+        
+        [Route("GetRestaurantOwnerByUsername")]
+        [HttpGet]
+        public async Task<IActionResult> GetRestaurantOwnerByUsername(string username)
+        {
+            try
+            {
+                var restaurantOwner = await _services.GetRestaurantOwnerByUsername(username);
+                return Ok(restaurantOwner);
+            }
+            catch (RestaurantOwnerNotFoundException e)
+            {
+                _logger.LogCritical(e.Message);
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                _logger.LogCritical(e.Message);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HotPotProject.Interfaces;
+using HotPotProject.Models;
 using HotPotProject.Models.DTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -49,5 +50,6 @@ namespace HotPotProject.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        
     }
 }

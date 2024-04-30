@@ -38,17 +38,24 @@ namespace HotPotProject.Repositories
         /// <returns>The deleted order, if found.</returns>
         public async Task<Order> Delete(int key)
         {
-            var order = await GetAsync(key);
-
-            if (order != null)
+            try
             {
-                _context.Orders.Remove(order);
-                await _context.SaveChangesAsync();
+                var order = await GetAsync(key);
 
-                LogInformation($"Order Deleted: {order.OrderId}");
+                if (order != null)
+                {
+                    _context.Orders.Remove(order);
+                    await _context.SaveChangesAsync();
+
+                    LogInformation($"Order Deleted: {order.OrderId}");
+                }
+
+                return order;
             }
-
-            return order;
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         /// <summary>

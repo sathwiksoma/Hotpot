@@ -1,4 +1,5 @@
 ﻿using HotPotProject.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotPotProject.Interfaces
 {
@@ -10,5 +11,10 @@ namespace HotPotProject.Interfaces
         public Task<List<RestaurantSpeciality>> GetAllSpecialities();
         Task<RestaurantSpeciality> AddRestaurantSpeciality(RestaurantSpeciality restaurantspeciality);
         public Task<List<CustomerReview>> GetCustomerReviews();
+        public Task<List<Restaurant>> GetAllRestaurants();
+        Task<List<Menu>> GetAllMenus();
+        Task<bool> DeleteRestaurant(int restaurantId);
+        public Task<RestaurantOwner> GetRestaurantOwnerByUsername(string username);
+
     }
 }

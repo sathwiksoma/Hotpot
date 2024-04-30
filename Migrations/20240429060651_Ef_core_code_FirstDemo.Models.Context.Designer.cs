@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HotPotProject.Migrations
 {
     [DbContext(typeof(ApplicationTrackerContext))]
-    [Migration("20240406130618_EF_HOTPOT_PROJECT.APPLICATIONTRACKERCONTEXT")]
-    partial class EF_HOTPOT_PROJECTAPPLICATIONTRACKERCONTEXT
+    [Migration("20240429060651_Ef_core_code_FirstDemo.Models.Context")]
+    partial class Ef_core_code_FirstDemoModelsContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -213,6 +213,9 @@ namespace HotPotProject.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MenuId"));
+
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeSpan?>("CookingTime")
                         .HasColumnType("time");

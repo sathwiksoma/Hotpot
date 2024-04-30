@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace HotPotProject.Controllers
 {
+    [EnableCors("ReactPolicy")]
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("ReactPolicy")]
 
     public class DeliveryPartnerController : ControllerBase
     {
@@ -57,7 +57,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles ="DeliveryPartner,Admin")]
+       //[Authorize(Roles ="DeliveryPartner,Admin")]
         [Route("GetDetails")]
         [HttpGet]
         public async Task<IActionResult> GetDetails(int partnerId)
@@ -74,7 +74,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "DeliveryPartner")]
+      //  [Authorize(Roles = "DeliveryPartner")]
         [Route("UpdateDetails")]
         [HttpPut]
         public async Task<IActionResult> UpdateDetails(DeliveryPartner deliveryPartner)
@@ -91,7 +91,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "DeliveryPartner,Admin")]
+       // [Authorize(Roles = "DeliveryPartner,Admin")]
         [Route("ChangeOrderStatus")]
         [HttpPut]
         public async Task<IActionResult> ChangeOrderStatus(int orderId)
@@ -108,7 +108,7 @@ namespace HotPotProject.Controllers
             }
         }
 
-        [Authorize(Roles = "DeliveryPartner,Admin")]
+        //[Authorize(Roles = "DeliveryPartner,Admin")]
         [Route("GetAllOrders")]
         [HttpGet]
         public async Task<IActionResult> GetAllOrders(int partnerId)

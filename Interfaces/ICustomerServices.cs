@@ -1,5 +1,6 @@
 ﻿using HotPotProject.Models.DTO;
 using HotPotProject.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HotPotProject.Interfaces
 {
@@ -13,7 +14,7 @@ namespace HotPotProject.Interfaces
         public Task<OrderMenuDTO> PlaceOrder(int customerId, string paymentMode);
         public Task<OrderMenuDTO> PlaceOrderForOne(int cartItemId, string paymentMode);
         public Task<Payment> RecordPayment(Order order);
-        public Task<CartMenuDTO> AddToCart(int userId, int menuItemId);
+        public  Task<int> AddToCart(int userId, int menuItemId);
         public Task<List<CartMenuDTO>> GetCarts(int customerId);
         public Task DeleteCartItem(int cartItemId);
         public Task EmptyCart(int customerId);
@@ -37,5 +38,6 @@ namespace HotPotProject.Interfaces
         public Task<List<Menu>> FilterMenuByPriceRange(int restaurantId, float minPrice, float maxPrice);
         public Task<List<Menu>> FilterMenuByType(int restaurantId, string type);
         public Task<List<Menu>> FilterMenuByCuisine(int restaurantId, string cuisine);
+        public Task<IActionResult> GetCustomerByUsername(string username);
     }
 }

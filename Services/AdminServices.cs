@@ -4,6 +4,7 @@ using HotPotProject.Models;
 using System.Security.Cryptography;
 using System.Text;
 using HotPotProject.Exceptions;
+using HotPotProject.Repositories;
 
 namespace HotPotProject.Services
 {
@@ -64,5 +65,6 @@ namespace HotPotProject.Services
             registerUser.Role = "Admin";
             return registerUser;
         }
+        
     }
 }
